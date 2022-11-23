@@ -57,18 +57,18 @@ exports.editdata = async function (req, res)  {
     try {
         if (token) {
             const user = jwt.verify(token, JWT_SECRET)
-            const username = user.Username
+            const _id = user.id
             const password = await bcrypt.hash(passwordNotHash, 10)
-            await accountModel.updateOne(
-                { _id:user.id },
+            
+            await accountModel.update(
+                { _id:_id},
                 {
                     $set: {Username:Username, Password:password, Name:Name, Phone:Phone,Email:Email, Company:Company, Nationality:Nationality }
                 }
             )
-            res.json({ status: 'ok' })
-        }else{
-            res.json({status:"error", error:"Invalid Password"}).send(200)
-        }
+         
+        }   
+        res.json({ status: 'ok' })
     } catch (error) {
         console.log(error)
         res.json({ status: 'error', error: 'error' })
